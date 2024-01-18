@@ -5,6 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c959917f-fa6a-4304-be9e-3a2817d2f875" name="Changes" comment="By Animixom 12.01.24 - чист оснонвание">
+      <change afterPath="$PROJECT_DIR$/datafiles/Lightman.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/evil1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/health.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
@@ -37,15 +40,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.run.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "ANIMIXOM",
-    "last_opened_file_path": "C:/Games/pygameLC"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ANIMIXOM&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Games/pygameLC&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Games\pygameLC" />
@@ -141,48 +144,43 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run.py</url>
-          <line>112</line>
-          <option name="timeStamp" value="4" />
+          <line>18</line>
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run.py</url>
-          <line>111</line>
-          <option name="timeStamp" value="5" />
+          <line>20</line>
+          <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run.py</url>
-          <line>4</line>
-          <option name="timeStamp" value="17" />
+          <line>21</line>
+          <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run.py</url>
-          <line>6</line>
-          <option name="timeStamp" value="18" />
+          <line>19</line>
+          <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run.py</url>
-          <line>7</line>
-          <option name="timeStamp" value="19" />
+          <line>22</line>
+          <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run.py</url>
-          <line>9</line>
-          <option name="timeStamp" value="20" />
+          <line>25</line>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run.py</url>
-          <line>8</line>
-          <option name="timeStamp" value="21" />
+          <line>24</line>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run.py</url>
-          <line>10</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run.py</url>
-          <line>5</line>
-          <option name="timeStamp" value="23" />
+          <line>23</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
