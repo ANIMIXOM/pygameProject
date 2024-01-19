@@ -90,7 +90,7 @@ class Evil(pygame.sprite.Sprite):
         self.player_sprites = player_sprites
         self.give_money = False
 
-    def update(self, sceer):
+    def update(self):
         global flag_is_dying, flag_is_dying_enemy
         if self.hp > 0:
             player = self.player_sprites.sprites()[0]
@@ -241,7 +241,7 @@ inventory = {
 
 
 def start_or_over_screen():
-    global flag_is_dying
+    global flag_is_dying, screen
     if flag_is_dying:
         screen.blit(
             scale(load("datafiles/game_over.png"), (1280, 720)),
@@ -266,7 +266,6 @@ def start_or_over_screen():
 
 flag_is_dying = False
 flag_is_dying_enemy = False
-start_or_over_screen()
 while True:
     if maps == "map0":
         fand_torg = False
@@ -317,6 +316,7 @@ while True:
             gui = gui()
         except TypeError:
             print("reset")
+    start_or_over_screen()
     while running:
         try:
             sound_sword = pygame.mixer.Sound("datafiles/sound_fite.mp3")
