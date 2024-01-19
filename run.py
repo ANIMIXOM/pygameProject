@@ -1,6 +1,8 @@
 import random
-
+import sys
+from pygame.transform import scale
 import pygame
+from pygame.image import load
 
 pygame.init()
 gui_torg = False
@@ -52,7 +54,7 @@ class torg(pygame.sprite.Sprite):
         screen.blit(self.image, (700, 280))
 
 
-maps = "map0"
+maps = "map1"
 
 
 class gui:
@@ -88,6 +90,7 @@ class Evil(pygame.sprite.Sprite):
         self.give_money = False
 
     def update(self):
+        global flag_is_dying, flag_is_dying_enemy
         if self.hp > 0:
             player = self.player_sprites.sprites()[0]
             distance = abs(pl.rect.x - self.rect.x)
@@ -103,10 +106,19 @@ class Evil(pygame.sprite.Sprite):
                 # Проверяем столкновение с игроком
                 if pygame.sprite.spritecollide(self, self.player_sprites, False):
                     pl.hp -= 1
-                self.hp -= self.poison
-        elif not self.give_money:
-            inventory["wearpon"] += random.randint(1, 3)
-            self.give_money = True
+                    if pl.hp == 0:
+                        flag_is_dying = True
+                    self.hp -= self.poison
+        else:
+            if not flag_is_dying_enemy:
+                self.image = load('datafiles/evil_death.png')
+                self.rect.y += 45
+                flag_is_dying_enemy = True
+
+
+        if not self.give_money:
+                inventory["wearpon"] += random.randint(1, 3)
+                self.give_money = True
 
 
 
@@ -197,6 +209,30 @@ class Player(pygame.sprite.Sprite):
             self.cur_frame = 0
 
 
+def start_or_over_screen():
+    global flag_is_dying
+    if flag_is_dying:
+        screen.blit(
+            scale(load("datafiles/game_over.png"), (1280, 720)),
+            (0, 0),
+        )
+    else:
+        screen.blit(scale((load("datafiles/start_game.png")), (1280, 720)), (0, 0))
+    pl.rect.x = 10
+    pl.rect.y = 510
+    pl.hp = 100
+    flag_is_dying = False
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                return
+        pygame.display.flip()
+        clock.tick(60)
+
+
 inventory = {
     "fire_cristal": 10,
     "el_cristal": 2,
@@ -204,134 +240,134 @@ inventory = {
     "wearpon": 20,
     "rupis": 20,
 }
-while True:
-    if maps == "map0":
-        fand_torg = False
-        otr = False
-        clock = pygame.time.Clock()
-        size = height, width = 1280, 720
-        screen = pygame.display.set_mode(size)
-        eff_sprites = pygame.sprite.Group()
-        player_sprites = pygame.sprite.Group()
-        see_sprites = pygame.sprite.Group()
-        evil_sprites = pygame.sprite.Group()
-        pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
-        running = True
-        attack = [False, 0]
-        attack_cr = [False, 0]
-        gui = gui()
-        Torg = torg()
-        torg_in_map = True
-        gui_t = gui_torg()
-        sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
-        fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
-        mous = None
-    elif maps == "map1":
-        try:
-            fand_torg = False
-            otr = False
-            clock = pygame.time.Clock()
-            size = height, width = 1280, 720
-            screen = pygame.display.set_mode(size)
-            eff_sprites = pygame.sprite.Group()
-            player_sprites = pygame.sprite.Group()
-            see_sprites = pygame.sprite.Group()
-            evil_sprites = pygame.sprite.Group()
-            pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
-            running = True
-            attack = [False, 0]
-            attack_cr = [False, 0]
-            Torg = torg()
-            torg_in_map = False
-            gui_t = gui_torg()
-            sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
-            fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
-            mous = None
-            Evil(player_sprites, 10, 500, pygame.image.load("datafiles/evil1.png"), 10002)
-            Evil(player_sprites, 40, 500, pygame.image.load("datafiles/evil1.png"), 10002)
-            Evil(player_sprites, 30, 500, pygame.image.load("datafiles/evil1.png"), 10002)
-            Evil(player_sprites, 20, 500, pygame.image.load("datafiles/evil1.png"), 10002)
-            gui = gui()
-        except TypeError:
-            print("reset")
-    while running:
-        try:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if pl.cur_frame >= 2:
-                        pl.cur_frame = 0
-                    attack = [True, 0]
-                    print("attack")
-                    pl.update_attack()
-                    for i in evil_sprites:
-                        if abs(i.rect.x - pl.rect.x) <= 60:
-                            i.hp -= 5
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_1:
-                        if inventory["fire_cristal"] != 0:
-                            inventory["fire_cristal"] -= 1
-                            enger_spire(
-                                pygame.image.load("datafiles/anim_fire.png"),
-                                3,
-                                1,
-                                pl.rect.x - 20,
-                                pl.rect.y - 10,
-                            )
-                            attack_cr = [True, 0]
-                            fire_son.play()
-                    if event.key == pygame.K_3:
-                        if inventory["healme5"] > 0:
-                            pl.hp += 5
-                            inventory["healme5"] -= 1
-                    if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                        sound_hod.play(-1)
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                        sound_hod.stop()
-            key = pygame.key.get_pressed()
-            if key[pygame.K_RIGHT]:
-                pl.update_hod("r")
-                otr = False
-            if key[pygame.K_LEFT]:
-                pl.update_hod("l")
-                otr = True
-            if attack[0] and attack[1] <= 2:
-                pl.update_attack()
-                attack[1] += 1
-            else:
-                attack = [False, 0]
-            screen.blit(pygame.image.load("datafiles/map1.png"), (0, 0))
-            if attack_cr[0] and attack_cr[1] <= 10:
-                eff_sprites.update()
-                eff_sprites.draw(screen)
-                attack_cr[1] += 1
-            else:
-                eff_sprites.empty()
-                fire_son.stop()
-                attack_cr[0] = False
-                attack_cr[1] = 0
-            if eff_sprites:
-                for i in eff_sprites:
-                    if evil_sprites:
-                        for j in evil_sprites:
-                            if abs(i.rect.x - j.rect.x) <= 50:
-                                j.poison += 1
-            evil_sprites.draw(screen)
-            evil_sprites.update()
-            player_sprites.draw(screen)
-            gui.update()
-            if torg_in_map:
-                Torg.update()
-            if fand_torg:
-                gui_t.update()
-            if pl.rect.x > 1280:
-                maps = "map1"
-                break
-            pygame.display.flip()
-            clock.tick(10)
-        except IndexError:
-            pl.cur_frame = 0
-            print("Ошибка анимации")
+if maps == "map0":
+    fand_torg = False
+    otr = False
+    clock = pygame.time.Clock()
+    size = height, width = 1280, 720
+    screen = pygame.display.set_mode(size)
+    eff_sprites = pygame.sprite.Group()
+    player_sprites = pygame.sprite.Group()
+    see_sprites = pygame.sprite.Group()
+    evil_sprites = pygame.sprite.Group()
+    pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
+    running = True
+    attack = [False, 0]
+    attack_cr = [False, 0]
+    gui = gui()
+    Torg = torg()
+    torg_in_map = True
+    gui_t = gui_torg()
+    sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
+    fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
+    mous = None
 
+elif maps == "map1":
+    fand_torg = False
+    otr = False
+    clock = pygame.time.Clock()
+    size = height, width = 1280, 720
+    screen = pygame.display.set_mode(size)
+    eff_sprites = pygame.sprite.Group()
+    player_sprites = pygame.sprite.Group()
+    see_sprites = pygame.sprite.Group()
+    evil_sprites = pygame.sprite.Group()
+    pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
+    running = True
+    attack = [False, 0]
+    attack_cr = [False, 0]
+    gui = gui()
+    Torg = torg()
+    torg_in_map = False
+    gui_t = gui_torg()
+    sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
+    fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
+    mous = None
+    Evil(player_sprites, 10, 500, pygame.image.load("datafiles/evil1.png"), 10002)
+    Evil(player_sprites, 40, 500, pygame.image.load("datafiles/evil1.png"), 10002)
+    Evil(player_sprites, 30, 500, pygame.image.load("datafiles/evil1.png"), 10002)
+    Evil(player_sprites, 20, 500, pygame.image.load("datafiles/evil1.png"), 10002)
+flag_is_dying = False
+flag_is_dying_enemy = False
+start_or_over_screen()
+while running:
+    try:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pl.cur_frame >= 2:
+                    pl.cur_frame = 0
+                attack = [True, 0]
+                print("attack")
+                pl.update_attack()
+                for i in evil_sprites:
+                    if abs(i.rect.x - pl.rect.x) <= 60:
+                        i.hp -= 5
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    if inventory["fire_cristal"] != 0:
+                        inventory["fire_cristal"] -= 1
+                        enger_spire(
+                            pygame.image.load("datafiles/anim_fire.png"),
+                            3,
+                            1,
+                            pl.rect.x - 20,
+                            pl.rect.y - 10,
+                        )
+                        attack_cr = [True, 0]
+                        fire_son.play()
+                if event.key == pygame.K_3:
+                    if inventory["healme5"] > 0:
+                        pl.hp += 5
+                        inventory["healme5"] -= 1
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    sound_hod.play(-1)
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    sound_hod.stop()
+        key = pygame.key.get_pressed()
+        if key[pygame.K_d]:
+            pl.update_hod("r")
+            otr = False
+        if key[pygame.K_a]:
+            pl.update_hod("l")
+            otr = True
+        if attack[0] and attack[1] <= 2:
+            pl.update_attack()
+            attack[1] += 1
+        else:
+            attack = [False, 0]
+        screen.blit(pygame.image.load("datafiles/map1.png"), (0, 0))
+        if attack_cr[0] and attack_cr[1] <= 10:
+            eff_sprites.update()
+            eff_sprites.draw(screen)
+            attack_cr[1] += 1
+        else:
+            eff_sprites.empty()
+            fire_son.stop()
+            attack_cr[0] = False
+            attack_cr[1] = 0
+        if eff_sprites:
+            for i in eff_sprites:
+                if evil_sprites:
+                    for j in evil_sprites:
+                        if abs(i.rect.x - j.rect.x) <= 50:
+                            j.poison += 1
+        if flag_is_dying:
+            start_or_over_screen()
+        evil_sprites.draw(screen)
+        evil_sprites.update()
+        player_sprites.draw(screen)
+        gui.update()
+        if torg_in_map:
+            Torg.update()
+        if fand_torg:
+            gui_t.update()
+        if pl.rect.x > 1280:
+            maps = "maps1"
+        pygame.display.flip()
+        clock.tick(10)
+    except IndexError:
+        pl.cur_frame = 0
+        print("Ошибка анимации")
