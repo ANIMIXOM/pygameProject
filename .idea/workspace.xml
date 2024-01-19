@@ -4,8 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c959917f-fa6a-4304-be9e-3a2817d2f875" name="Changes" comment="сделал физику (она работает пока на моей карте)">
+    <list default="true" id="c959917f-fa6a-4304-be9e-3a2817d2f875" name="Changes" comment="pep8">
+      <change afterPath="$PROJECT_DIR$/datafiles/coin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/el_buy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/evil_death.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/fire_buy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/game_over.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/inventory.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/sell.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/solution.7z" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/sound_fite.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/start_game.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/torg.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/torg.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +33,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="ANIMIXOM" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -35,6 +53,9 @@
       </UrlAndAccount>
     </option>
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/run.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -42,7 +63,9 @@
   &quot;associatedIndex&quot;: 1
 }</component>
   <component name="ProjectId" id="2aixFhn2UTvBiXArfdKjlC2PCna" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -66,7 +89,7 @@
       <recent name="C:\Users\yakus\pygameProjects" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.run">
     <configuration name="run" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pygameLC" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -133,9 +156,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.run" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.test2" />
-        <item itemvalue="Python.run" />
       </list>
     </recent_temporary>
   </component>
@@ -212,16 +235,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run.py</url>
-          <line>48</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run.py</url>
-          <line>49</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/test.py</url>
           <line>190</line>
