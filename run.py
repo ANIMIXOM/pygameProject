@@ -1,3 +1,5 @@
+import random
+
 import pygame
 
 pygame.init()
@@ -9,20 +11,27 @@ class gui_torg(pygame.sprite.Sprite):
         super().__init__()
         self.gui_sell = pygame.image.load("datafiles/sell.png")
         self.rect_sell = self.gui_sell.get_rect()
+        self.gui_buy_fire = pygame.image.load("datafiles/fire_buy.png")
+        self.gui_buy_el = pygame.image.load("datafiles/el_buy.png")
+        self.sound = pygame.mixer.Sound("datafiles/torg.mp3")
 
     def update(self):
+        screen.blit(self.gui_buy_el, (300, 200))
+        screen.blit(self.gui_buy_fire, (100, 200))
         screen.blit(self.gui_sell, (200, 200))
         key = pygame.key.get_pressed()
         if key[pygame.K_g]:
             if inventory["wearpon"] > 0:
                 inventory["wearpon"] -= 1
                 inventory["rupis"] += 1
+                self.sound.play(1)
             else:
                 print("У вас нету товара")
         if key[pygame.K_h]:
             if inventory["rupis"] >= 3:
                 inventory["rupis"] -= 3
                 inventory["fire_cristal"] += 1
+                self.sound.play(1)
             else:
                 print("Нема деняг")
 
@@ -76,6 +85,7 @@ class Evil(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.player_sprites = player_sprites
+        self.give_money = False
 
     def update(self):
         if self.hp > 0:
@@ -94,6 +104,10 @@ class Evil(pygame.sprite.Sprite):
                 if pygame.sprite.spritecollide(self, self.player_sprites, False):
                     pl.hp -= 1
                 self.hp -= self.poison
+        elif not self.give_money:
+            inventory["wearpon"] += random.randint(1, 3)
+            self.give_money = True
+
 
 
 class enger_spire(pygame.sprite.Sprite):
@@ -187,8 +201,6 @@ inventory = {
     "fire_cristal": 10,
     "el_cristal": 2,
     "healme5": 3,
-    "healme20": 10,
-    "healme100": 1,
     "wearpon": 20,
     "rupis": 20,
 }
@@ -239,6 +251,10 @@ while running:
                         )
                         attack_cr = [True, 0]
                         fire_son.play()
+                if event.key == pygame.K_3:
+                    if inventory["healme5"] > 0:
+                        pl.hp += 5
+                        inventory["healme5"] -= 1
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     sound_hod.play(-1)
             if event.type == pygame.KEYUP:
