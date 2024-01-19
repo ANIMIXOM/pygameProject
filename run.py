@@ -3,7 +3,7 @@ import pygame
 pygame.init()
 
 
-class gui():
+class gui:
     def __init__(self):
         self.font = pygame.font.Font("datafiles/Lightman.ttf", 20)
         self.text_surface = self.font.render("99", True, (255, 255, 255))
@@ -13,7 +13,9 @@ class gui():
     def update(self):
         screen.blit(self.healim, (10, 10))
         screen.blit(self.text_surface, (20, 20))
-        self.text_surface = self.text_surface = self.font.render(str(pl.hp), True, (255, 255, 255))
+        self.text_surface = self.text_surface = self.font.render(
+            str(pl.hp), True, (255, 255, 255)
+        )
 
 
 class Evil(pygame.sprite.Sprite):
@@ -28,6 +30,7 @@ class Evil(pygame.sprite.Sprite):
         self.player_sprites = player_sprites
 
     def update(self):
+        global flag
         if self.hp > 0:
             player = self.player_sprites.sprites()[0]
             distance = abs(pl.rect.x - self.rect.x)
@@ -43,6 +46,8 @@ class Evil(pygame.sprite.Sprite):
                 # Проверяем столкновение с игроком
                 if pygame.sprite.spritecollide(self, self.player_sprites, False):
                     pl.hp -= 1
+                if pl.hp == 0:
+                    flag = False
                 self.hp -= self.poison
 
 
@@ -56,13 +61,15 @@ class enger_spire(pygame.sprite.Sprite):
         self.rect = self.rect.move(x, y)
 
     def cut_sheet(self, sheet, columns, rows):
-        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
-                                sheet.get_height() // rows)
+        self.rect = pygame.Rect(
+            0, 0, sheet.get_width() // columns, sheet.get_height() // rows
+        )
         for j in range(rows):
             for i in range(columns):
                 frame_location = (self.rect.w * i, self.rect.h * j)
-                self.frames.append(sheet.subsurface(pygame.Rect(
-                    frame_location, self.rect.size)))
+                self.frames.append(
+                    sheet.subsurface(pygame.Rect(frame_location, self.rect.size))
+                )
 
     def update(self):
         self.cur_frames += 1
@@ -84,22 +91,26 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.rect.move(x, y)
 
     def cut_sheet_hod(self, sheet, columns, rows):
-        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
-                                sheet.get_height() // rows)
+        self.rect = pygame.Rect(
+            0, 0, sheet.get_width() // columns, sheet.get_height() // rows
+        )
         for j in range(rows):
             for i in range(columns):
                 frame_location = (self.rect.w * i, self.rect.h * j)
-                self.frames_hod.append(sheet.subsurface(pygame.Rect(
-                    frame_location, self.rect.size)))
+                self.frames_hod.append(
+                    sheet.subsurface(pygame.Rect(frame_location, self.rect.size))
+                )
 
     def cut_sheet_attack(self, sheet, columns, rows):
-        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns,
-                                sheet.get_height() // rows)
+        self.rect = pygame.Rect(
+            0, 0, sheet.get_width() // columns, sheet.get_height() // rows
+        )
         for j in range(rows):
             for i in range(columns):
                 frame_location = (self.rect.w * i, self.rect.h * j)
-                self.frames_at.append(sheet.subsurface(pygame.Rect(
-                    frame_location, self.rect.size)))
+                self.frames_at.append(
+                    sheet.subsurface(pygame.Rect(frame_location, self.rect.size))
+                )
 
     def update_hod(self, n):
         self.cur_frame = self.cur_frame + 1
@@ -127,10 +138,18 @@ class Player(pygame.sprite.Sprite):
             self.cur_frame = 0
 
 
-inventory = {"fire_cristal": 2, "el_cristal": 2, "healme5": 3, "healme20": 10, "healme100": 1,
-             "wearpon": 0, "rupis": 0}
+inventory = {
+    "fire_cristal": 2,
+    "el_cristal": 2,
+    "healme5": 3,
+    "healme20": 10,
+    "healme100": 1,
+    "wearpon": 0,
+    "rupis": 0,
+}
 
 otr = False
+flag = True
 clock = pygame.time.Clock()
 size = height, width = 1280, 720
 screen = pygame.display.set_mode(size)
@@ -142,7 +161,7 @@ pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
 running = True
 attack = [False, 0]
 attack_cr = [False, 0]
-Evil(player_sprites, 500, 500, pygame.image.load("datafiles/evil1.png"), 30)
+evil = Evil(player_sprites, 500, 500, pygame.image.load("datafiles/evil1.png"), 30)
 gui = gui()
 sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
 fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
@@ -161,10 +180,24 @@ while running:
                     if abs(i.rect.x - pl.rect.x) <= 60:
                         i.hp -= 2
             if event.type == pygame.KEYDOWN:
+                if not flag:
+                    pl.rect.x = 10
+                    pl.rect.y = 500
+                    evil.rect.x = 500
+                    evil.rect.y = 500
+                    pl.hp = 100
+                    evil.hp = 30
+                    flag = True
                 if event.key == pygame.K_1:
                     if inventory["fire_cristal"] != 0:
                         inventory["fire_cristal"] -= 1
-                        enger_spire(pygame.image.load("datafiles/anim_fire.png"), 3, 1, pl.rect.x - 20, pl.rect.y - 10)
+                        enger_spire(
+                            pygame.image.load("datafiles/anim_fire.png"),
+                            3,
+                            1,
+                            pl.rect.x - 20,
+                            pl.rect.y - 10,
+                        )
                         attack_cr = [True, 0]
                         fire_son.play()
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -173,10 +206,10 @@ while running:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     sound_hod.stop()
         key = pygame.key.get_pressed()
-        if key[pygame.K_RIGHT]:
+        if key[pygame.K_d]:
             pl.update_hod("r")
             otr = False
-        if key[pygame.K_LEFT]:
+        if key[pygame.K_a]:
             pl.update_hod("l")
             otr = True
         if attack[0] and attack[1] <= 2:
@@ -184,7 +217,6 @@ while running:
             attack[1] += 1
         else:
             attack = [False, 0]
-        screen.blit(pygame.image.load("datafiles/map1.png"), (0, 0))
         if attack_cr[0] and attack_cr[1] <= 10:
             eff_sprites.update()
             eff_sprites.draw(screen)
@@ -200,10 +232,25 @@ while running:
                     for j in evil_sprites:
                         if abs(i.rect.x - j.rect.x) <= 50:
                             j.poison += 1
-        evil_sprites.draw(screen)
-        evil_sprites.update()
-        player_sprites.draw(screen)
-        gui.update()
+        if not flag:
+
+            screen.blit(pygame.image.load("datafiles/map1.png"), (0, 0))
+            evil_sprites.draw(screen)
+            evil_sprites.update()
+            player_sprites.draw(screen)
+            gui.update()
+            screen.blit(
+                pygame.transform.scale(
+                    pygame.image.load("datafiles/game_over.png"), (1280, 720)
+                ),
+                (0, 0),
+            )
+        else:
+            screen.blit(pygame.image.load("datafiles/map1.png"), (0, 0))
+            evil_sprites.draw(screen)
+            evil_sprites.update()
+            player_sprites.draw(screen)
+            gui.update()
         pygame.display.flip()
         clock.tick(10)
     except IndexError:
