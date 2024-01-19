@@ -1,7 +1,9 @@
 import random
+import random
 import sys
-
+from pygame.transform import scale
 import pygame
+from pygame.image import load
 
 pygame.init()
 gui_torg = False
@@ -88,7 +90,8 @@ class Evil(pygame.sprite.Sprite):
         self.player_sprites = player_sprites
         self.give_money = False
 
-    def update(self):
+    def update(self, sceer):
+        global flag_is_dying, flag_is_dying_enemy
         if self.hp > 0:
             player = self.player_sprites.sprites()[0]
             distance = abs(pl.rect.x - self.rect.x)
@@ -104,8 +107,15 @@ class Evil(pygame.sprite.Sprite):
                 # Проверяем столкновение с игроком
                 if pygame.sprite.spritecollide(self, self.player_sprites, False):
                     pl.hp -= 1
+                if pl.hp == 0:
+                    flag_is_dying = True
                 self.hp -= self.poison
-        elif not self.give_money:
+        else:
+            if not flag_is_dying_enemy:
+                self.image = load('datafiles/evil_death.png')
+                self.rect.y += 45
+                flag_is_dying_enemy = True
+        if not self.give_money:
             inventory["wearpon"] += random.randint(1, 3)
             self.give_money = True
 
@@ -197,6 +207,29 @@ class Player(pygame.sprite.Sprite):
             self.cur_frame = 0
 
 
+def start_or_over_screen():
+    global flag_is_dying
+    if flag_is_dying:
+        screen.blit(
+            scale(load("datafiles/game_over.png"), (1280, 720)),
+            (0, 0),
+        )
+    else:
+        screen.blit(scale((load("datafiles/start_game.png")), (1280, 720)), (0, 0))
+    pl.rect.x = 10
+    pl.rect.y = 510
+    pl.hp = 100
+    flag_is_dying = False
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                return
+        pygame.display.flip()
+        clock.tick(60)
+
 
 inventory = {
     "fire_cristal": 10,
@@ -205,6 +238,35 @@ inventory = {
     "wearpon": 20,
     "rupis": 20,
 }
+
+
+def start_or_over_screen():
+    global flag_is_dying
+    if flag_is_dying:
+        screen.blit(
+            scale(load("datafiles/game_over.png"), (1280, 720)),
+            (0, 0),
+        )
+    else:
+        screen.blit(scale((load("datafiles/start_game.png")), (1280, 720)), (0, 0))
+    pl.rect.x = 10
+    pl.rect.y = 510
+    pl.hp = 100
+    flag_is_dying = False
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                return
+        pygame.display.flip()
+        clock.tick(60)
+
+
+flag_is_dying = False
+flag_is_dying_enemy = False
+start_or_over_screen()
 while True:
     if maps == "map0":
         fand_torg = False
@@ -321,6 +383,8 @@ while True:
                         for j in evil_sprites:
                             if abs(i.rect.x - j.rect.x) <= 50:
                                 j.poison += 1
+            if flag_is_dying:
+                start_or_over_screen()
             evil_sprites.draw(screen)
             evil_sprites.update()
             player_sprites.draw(screen)
