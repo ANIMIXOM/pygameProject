@@ -288,6 +288,7 @@ while True:
         sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
         fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
         mous = None
+        start_or_over_screen()
     elif maps == "map1":
         try:
             fand_torg = False
@@ -309,14 +310,14 @@ while True:
             sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
             fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
             mous = None
-            Evil(player_sprites, 10, 500, pygame.image.load("datafiles/evil1.png"), 30)
-            Evil(player_sprites, 40, 500, pygame.image.load("datafiles/evil1.png"), 30)
-            Evil(player_sprites, 30, 500, pygame.image.load("datafiles/evil1.png"), 30)
-            Evil(player_sprites, 20, 500, pygame.image.load("datafiles/evil1.png"), 30)
+            Evil(player_sprites, 100, 500, pygame.image.load("datafiles/evil1.png"), 30)
+            Evil(player_sprites, 200, 500, pygame.image.load("datafiles/evil1.png"), 30)
+            Evil(player_sprites, 500, 500, pygame.image.load("datafiles/evil1.png"), 30)
+            Evil(player_sprites, 220, 500, pygame.image.load("datafiles/evil1.png"), 30)
             gui = gui()
         except TypeError:
             print("reset")
-    start_or_over_screen()
+
     while running:
         try:
             sound_sword = pygame.mixer.Sound("datafiles/sound_fite.mp3")
