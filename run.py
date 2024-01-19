@@ -1,4 +1,7 @@
+import sys
+from pygame.transform import scale
 import pygame
+from pygame.image import load
 
 pygame.init()
 
@@ -7,8 +10,8 @@ class gui:
     def __init__(self):
         self.font = pygame.font.Font("datafiles/Lightman.ttf", 20)
         self.text_surface = self.font.render("99", True, (255, 255, 255))
-        self.healim = pygame.image.load("datafiles/health.png")
-        self.healim = pygame.transform.scale(self.healim, (50, 50))
+        self.healim = load("datafiles/health.png")
+        self.healim = scale(self.healim, (50, 50))
 
     def update(self):
         screen.blit(self.healim, (10, 10))
@@ -30,7 +33,7 @@ class Evil(pygame.sprite.Sprite):
         self.player_sprites = player_sprites
 
     def update(self):
-        global flag
+        global flag_is_dying, flag_is_dying_enemy
         if self.hp > 0:
             player = self.player_sprites.sprites()[0]
             distance = abs(pl.rect.x - self.rect.x)
@@ -47,8 +50,14 @@ class Evil(pygame.sprite.Sprite):
                 if pygame.sprite.spritecollide(self, self.player_sprites, False):
                     pl.hp -= 1
                 if pl.hp == 0:
-                    flag = False
+                    flag_is_dying = True
                 self.hp -= self.poison
+
+        else:
+            if not flag_is_dying_enemy:
+                self.image = load('datafiles/evil_death.png')
+                self.rect.y += 45
+                flag_is_dying_enemy = True
 
 
 class enger_spire(pygame.sprite.Sprite):
@@ -85,7 +94,7 @@ class Player(pygame.sprite.Sprite):
         self.frames_hod = []
         self.frames_at = []
         self.cut_sheet_hod(sheet, columns, rows)
-        self.cut_sheet_attack(pygame.image.load("datafiles/anim_at.png"), 3, 1)
+        self.cut_sheet_attack(load("datafiles/anim_at.png"), 3, 1)
         self.cur_frame = 0
         self.image = self.frames_hod[self.cur_frame]
         self.rect = self.rect.move(x, y)
@@ -115,10 +124,10 @@ class Player(pygame.sprite.Sprite):
     def update_hod(self, n):
         self.cur_frame = self.cur_frame + 1
         if n == "r":
-            self.rect.x += 30
+            self.rect.x += 15
             self.image = self.frames_hod[self.cur_frame]
         else:
-            self.rect.x -= 30
+            self.rect.x -= 15
             images = self.frames_hod[self.cur_frame]
             images = pygame.transform.flip(images, True, False)
             self.image = images
@@ -148,8 +157,37 @@ inventory = {
     "rupis": 0,
 }
 
+
+def start_or_over_screen():
+    global flag_is_dying
+    if flag_is_dying:
+        screen.blit(
+            scale(load("datafiles/game_over.png"), (1280, 720)),
+            (0, 0),
+        )
+    else:
+        screen.blit(scale((load("datafiles/start_game.png")), (1280, 720)), (0, 0))
+    pl.rect.x = 10
+    pl.rect.y = 510
+    evil.rect.x = 500
+    evil.rect.y = 510
+    pl.hp = 100
+    evil.hp = 30
+    flag_is_dying = False
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                return
+        pygame.display.flip()
+        clock.tick(60)
+
+
 otr = False
-flag = True
+flag_is_dying = False
+flag_is_dying_enemy = False
 clock = pygame.time.Clock()
 size = height, width = 1280, 720
 screen = pygame.display.set_mode(size)
@@ -157,14 +195,15 @@ eff_sprites = pygame.sprite.Group()
 player_sprites = pygame.sprite.Group()
 see_sprites = pygame.sprite.Group()
 evil_sprites = pygame.sprite.Group()
-pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
+pl = Player(load("datafiles/anim.png"), 5, 1, 10, 510)
 running = True
 attack = [False, 0]
 attack_cr = [False, 0]
-evil = Evil(player_sprites, 500, 500, pygame.image.load("datafiles/evil1.png"), 30)
+evil = Evil(player_sprites, 500, 510, load("datafiles/evil1.png"), 30)
 gui = gui()
 sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
 fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
+start_or_over_screen()
 while running:
     try:
         for event in pygame.event.get():
@@ -180,19 +219,11 @@ while running:
                     if abs(i.rect.x - pl.rect.x) <= 60:
                         i.hp -= 2
             if event.type == pygame.KEYDOWN:
-                if not flag:
-                    pl.rect.x = 10
-                    pl.rect.y = 500
-                    evil.rect.x = 500
-                    evil.rect.y = 500
-                    pl.hp = 100
-                    evil.hp = 30
-                    flag = True
                 if event.key == pygame.K_1:
                     if inventory["fire_cristal"] != 0:
                         inventory["fire_cristal"] -= 1
                         enger_spire(
-                            pygame.image.load("datafiles/anim_fire.png"),
+                            load("datafiles/anim_fire.png"),
                             3,
                             1,
                             pl.rect.x - 20,
@@ -232,27 +263,16 @@ while running:
                     for j in evil_sprites:
                         if abs(i.rect.x - j.rect.x) <= 50:
                             j.poison += 1
-        if not flag:
+        if flag_is_dying:
+            start_or_over_screen()
+        screen.blit(load("datafiles/map1.png"), (0, 0))
+        evil_sprites.draw(screen)
+        evil_sprites.update()
+        player_sprites.draw(screen)
+        gui.update()
 
-            screen.blit(pygame.image.load("datafiles/map1.png"), (0, 0))
-            evil_sprites.draw(screen)
-            evil_sprites.update()
-            player_sprites.draw(screen)
-            gui.update()
-            screen.blit(
-                pygame.transform.scale(
-                    pygame.image.load("datafiles/game_over.png"), (1280, 720)
-                ),
-                (0, 0),
-            )
-        else:
-            screen.blit(pygame.image.load("datafiles/map1.png"), (0, 0))
-            evil_sprites.draw(screen)
-            evil_sprites.update()
-            player_sprites.draw(screen)
-            gui.update()
         pygame.display.flip()
-        clock.tick(10)
+        clock.tick(9)
     except IndexError:
         pl.cur_frame = 0
         print("Ошибка анимации")
