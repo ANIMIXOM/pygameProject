@@ -52,7 +52,7 @@ class torg(pygame.sprite.Sprite):
         screen.blit(self.image, (700, 280))
 
 
-maps = "map0"
+maps = "map1"
 
 
 class gui:
@@ -204,26 +204,53 @@ inventory = {
     "wearpon": 20,
     "rupis": 20,
 }
-fand_torg = False
-otr = False
-clock = pygame.time.Clock()
-size = height, width = 1280, 720
-screen = pygame.display.set_mode(size)
-eff_sprites = pygame.sprite.Group()
-player_sprites = pygame.sprite.Group()
-see_sprites = pygame.sprite.Group()
-evil_sprites = pygame.sprite.Group()
-pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
-running = True
-attack = [False, 0]
-attack_cr = [False, 0]
-gui = gui()
-Torg = torg()
-torg_in_map = True
-gui_t = gui_torg()
-sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
-fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
-mous = None
+if maps == "map0":
+    fand_torg = False
+    otr = False
+    clock = pygame.time.Clock()
+    size = height, width = 1280, 720
+    screen = pygame.display.set_mode(size)
+    eff_sprites = pygame.sprite.Group()
+    player_sprites = pygame.sprite.Group()
+    see_sprites = pygame.sprite.Group()
+    evil_sprites = pygame.sprite.Group()
+    pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
+    running = True
+    attack = [False, 0]
+    attack_cr = [False, 0]
+    gui = gui()
+    Torg = torg()
+    torg_in_map = True
+    gui_t = gui_torg()
+    sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
+    fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
+    mous = None
+elif maps == "map1":
+    fand_torg = False
+    otr = False
+    clock = pygame.time.Clock()
+    size = height, width = 1280, 720
+    screen = pygame.display.set_mode(size)
+    eff_sprites = pygame.sprite.Group()
+    player_sprites = pygame.sprite.Group()
+    see_sprites = pygame.sprite.Group()
+    evil_sprites = pygame.sprite.Group()
+    pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
+    running = True
+    attack = [False, 0]
+    attack_cr = [False, 0]
+    gui = gui()
+    Torg = torg()
+    torg_in_map = False
+    gui_t = gui_torg()
+    sound_hod = pygame.mixer.Sound("datafiles/soundh.mp3")
+    fire_son = pygame.mixer.Sound("datafiles/fire_son.mp3")
+    mous = None
+    Evil(player_sprites, 10, 500, pygame.image.load("datafiles/evil1.png"), 10002)
+    Evil(player_sprites, 40, 500, pygame.image.load("datafiles/evil1.png"), 10002)
+    Evil(player_sprites, 30, 500, pygame.image.load("datafiles/evil1.png"), 10002)
+    Evil(player_sprites, 20, 500, pygame.image.load("datafiles/evil1.png"), 10002)
+
 while running:
     try:
         for event in pygame.event.get():
@@ -296,8 +323,11 @@ while running:
             Torg.update()
         if fand_torg:
             gui_t.update()
+        if pl.rect.x > 1280:
+            maps = "maps1"
         pygame.display.flip()
         clock.tick(10)
     except IndexError:
         pl.cur_frame = 0
         print("Ошибка анимации")
+
