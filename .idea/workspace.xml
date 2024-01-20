@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c959917f-fa6a-4304-be9e-3a2817d2f875" name="Changes" comment="all clear" />
+    <list default="true" id="c959917f-fa6a-4304-be9e-3a2817d2f875" name="Changes" comment="all clear">
+      <change afterPath="$PROJECT_DIR$/~$сконечная игра.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Бесконечная игра.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Бесконечная игра.pptx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -171,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1705749392756</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="all clear">
+      <created>1705749670664</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1705749670664</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
