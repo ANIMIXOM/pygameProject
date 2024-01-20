@@ -4,21 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c959917f-fa6a-4304-be9e-3a2817d2f875" name="Changes" comment="pep8">
-      <change afterPath="$PROJECT_DIR$/datafiles/coin.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/el_buy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/evil_death.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/fire_buy.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/game_over.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/inventory.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/sell.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/solution.7z" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/sound_fite.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/start_game.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/torg.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/datafiles/torg.png" afterDir="false" />
+    <list default="true" id="c959917f-fa6a-4304-be9e-3a2817d2f875" name="Changes" comment="добавил анимацию смерти врагамм и тд ...">
+      <change afterPath="$PROJECT_DIR$/datafiles/boss.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/boss_death.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/fire_mag.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/datafiles/potion_hp.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/anim_stay.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jungle_tiles.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/map.tmx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ztwPZOI.tsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,7 +196,14 @@
       <option name="project" value="LOCAL" />
       <updated>1705606700463</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="добавил анимацию смерти врагамм и тд ...">
+      <created>1705702100001</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1705702100001</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -230,18 +233,10 @@
     <MESSAGE value="By Animixom 12.01.24 - чист оснонвание" />
     <MESSAGE value="++" />
     <MESSAGE value="сделал физику (она работает пока на моей карте)" />
-    <option name="LAST_COMMIT_MESSAGE" value="сделал физику (она работает пока на моей карте)" />
+    <MESSAGE value="добавил анимацию смерти врагамм и тд ..." />
+    <option name="LAST_COMMIT_MESSAGE" value="добавил анимацию смерти врагамм и тд ..." />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test.py</url>
-          <line>190</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="cur_list" />

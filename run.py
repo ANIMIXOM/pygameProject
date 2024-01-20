@@ -1,5 +1,7 @@
 import random
 import sys
+import time
+
 from pygame.transform import scale
 import pygame
 from pygame.image import load
@@ -18,6 +20,7 @@ class Gui_torg(pygame.sprite.Sprite):
         self.sound = pygame.mixer.Sound("datafiles/torg.mp3")
 
     def update(self):
+        global max_coins
         screen.blit(self.gui_buy_el, (400, 200))
         screen.blit(self.gui_buy_fire, (100, 200))
         screen.blit(self.gui_sell, (250, 200))
@@ -26,6 +29,7 @@ class Gui_torg(pygame.sprite.Sprite):
             if inventory["loot"] > 0:
                 inventory["loot"] -= 1
                 inventory["rupis"] += 1
+                max_coins += 1
                 self.sound.play(1)
             else:
                 print("У вас нету товара")
@@ -74,33 +78,50 @@ class Gui:
         self.summ = str(inventory["rupis"])
         self.rup = self.font.render(self.summ, True, (20, 255, 20))
         self.loot = self.font.render(str(inventory["loot"]), True, (20, 255, 20))
+        self.potion_hp = self.font.render(
+            str(inventory["healme5"]), True, (20, 255, 20)
+        )
+        self.fire_mag = self.font.render(
+            str(inventory["fire_cristal"]), True, (20, 255, 20)
+        )
 
     def update(self):
         screen.blit(self.healim, (25, 10))
         screen.blit(scale(load("datafiles/coin.png"), (50, 50)), (94, 7))
         screen.blit(scale(load("datafiles/inventory.png"), (50, 50)), (163, 7))
+        screen.blit(scale(load("datafiles/potion_hp.png"), (50, 70)), (25, 70))
+        screen.blit(scale(load("datafiles/fire_mag.png"), (50, 55)), (35, 140))
         screen.blit(self.hearts, (20, 20))
         screen.blit(self.rup, (100, 20))
         screen.blit(self.loot, (180, 20))
+        screen.blit(self.potion_hp, (5, 85))
+        screen.blit(self.fire_mag, (5, 160))
         self.loot = self.font.render(str(inventory["loot"]), True, (20, 255, 20))
         self.summ = str(inventory["rupis"])
         self.rup = self.font.render(self.summ, True, (20, 255, 20))
         self.hearts = self.hearts = self.font.render(str(pl.hp), True, (255, 255, 255))
+        self.potion_hp = self.font.render(
+            str(inventory["healme5"]), True, (20, 255, 20)
+        )
+        self.fire_mag = self.font.render(
+            str(inventory["fire_cristal"]), True, (20, 255, 20)
+        )
 
 
 class Evil(pygame.sprite.Sprite):
-    def __init__(self, player_sprites, x, y, image, hp):
+    def __init__(self, player_sprites, x, y, image, hp, typep):
         super().__init__(evil_sprites)
         self.poison = 0
         self.hp = int(hp)
         self.image = image
+        self.type = typep
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.player_sprites = player_sprites
 
     def update(self):
-        global flag_is_dying, flag_is_dying_enemy, evils, count
+        global flag_is_dying, flag_is_dying_enemy, evils, count, deaths, col_killed_enem, max_col_loots
         if self.hp > 0:
             player = self.player_sprites.sprites()[0]
             distance = abs(pl.rect.x - self.rect.x)
@@ -118,23 +139,33 @@ class Evil(pygame.sprite.Sprite):
                     pl.hp -= 1
                 if pl.hp == 0:
                     flag_is_dying = True
-                self.hp -= self.poison
-        else:
-            for i in evils:
-                if evils[i] != 0 and i.hp == 0:
+                    deaths += 1
+
+        for i in evils:
+            if pygame.sprite.spritecollide(i, eff_sprites, False):
+                i.hp -= self.poison
+            if evils[i] != 0 and i.hp <= 0:
+                if i.type == "normal":
                     i.image = load("datafiles/evil_death.png")
                     i.rect.y += 45
-                    inventory["loot"] += random.randint(1, 3)
-                    evils[i] = 0
-            if not flag_is_dying_enemy:
-                for i in evils:
-                    if evils[i] == 0:
-                        i.rect.y += 10
+                    loot = random.randint(1, 3)
+                else:
+                    i.image = scale(load("datafiles/boss_death.png"), (135, 76))
+                    loot = random.randint(5, 15)
 
-            if all(evils[j] == 0 for j in evils) and count == 2:
-                flag_is_dying_enemy = True
-            else:
-                count += 1
+                inventory["loot"] += loot
+                max_col_loots += loot
+                evils[i] = 0
+                col_killed_enem += 1
+        for i in evils:
+            if evils[i] == 0 and i.rect.y < 720:
+                i.rect.y += 10
+
+        if all(evils[j] == 0 for j in evils) and count == 2:
+            flag_is_dying_enemy = True
+
+        else:
+            count += 1
 
 
 class enger_spire(pygame.sprite.Sprite):
@@ -223,6 +254,13 @@ class Player(pygame.sprite.Sprite):
         if self.cur_frame == 2:
             self.cur_frame = 0
 
+    def update(self):
+        global flag_jumping
+        if pl.rect.y < 510:
+            pl.rect.y += 10
+            if pl.rect.y == 510:
+                flag_jumping = True
+
 
 def start_or_over_screen():
     global flag_is_dying
@@ -231,11 +269,12 @@ def start_or_over_screen():
             scale(load("datafiles/game_over.png"), (1280, 720)),
             (0, 0),
         )
+        pl.hp = 100
+
     else:
         screen.blit(scale((load("datafiles/start_game.png")), (1280, 720)), (0, 0))
     pl.rect.x = 10
     pl.rect.y = 510
-    pl.hp = 100
     flag_is_dying = False
     while True:
         for event in pygame.event.get():
@@ -248,6 +287,16 @@ def start_or_over_screen():
         clock.tick(60)
 
 
+def write_res():
+    global deaths, time_max, max_coins, col_killed_enem, max_col_loots
+    with open("result_game.txt", "w", encoding="utf-8") as res:
+        res.write(f"Время в игре: {time_max} секунд.\n")
+        res.write(f"Колличество убитых врагов: {col_killed_enem}.\n")
+        res.write(f"Поллучено геля {max_col_loots} с убитых врагов.\n")
+        res.write(f"Всего собранно монет: {max_coins}.\n")
+        res.write(f"Персоонаж умер {deaths} раз.")
+
+
 inventory = {
     "fire_cristal": 10,
     "el_cristal": 2,
@@ -255,6 +304,11 @@ inventory = {
     "loot": 0,
     "rupis": 20,
 }
+col_killed_enem = 0
+max_col_loots = 0
+max_coins = 20
+time_max = 0
+deaths = 0
 flag_is_dying = False
 flag_is_dying_enemy = False
 clock = pygame.time.Clock()
@@ -276,10 +330,20 @@ mous = None
 pl = Player(pygame.image.load("datafiles/anim.png"), 5, 1, 10, 500)
 otr = False
 fand_torg = False
-while True:
+play = True
+lvls = 0
+flag_jumping = True
+enemy_ph = 30
+boss_hp = 120
+evils = {}
+while play:
+    time.sleep(1)
+    time_max += 1
     if maps == "map0":
-        torg_in_map = True
-    elif maps == "map1":
+        if evils == {} or all(evils[j] == 0 for j in evils):
+            torg_in_map = True
+
+    elif maps == "map1" and (evils == {} or all(evils[j] == 0 for j in evils)):
         try:
             fand_torg = False
             torg_in_map = False
@@ -292,12 +356,28 @@ while True:
                     Evil(
                         player_sprites,
                         x,
-                        500,
+                        510,
                         pygame.image.load("datafiles/evil1.png"),
-                        30,
+                        enemy_ph,
+                        "normal",
                     )
                 ] = 1
                 x += 150
+            lvls += 1
+            if lvls % 5 == 1:
+                evils[
+                    Evil(
+                        player_sprites,
+                        x,
+                        390,
+                        scale(pygame.image.load("datafiles/boss.png"), (180, 180)),
+                        boss_hp,
+                        "boss",
+                    )
+                ] = 1
+            enemy_ph += enemy_ph * 0.05
+            boss_hp += boss_hp * 0.05
+            print(enemy_ph, boss_hp)
         except TypeError:
             print("reset")
     start_or_over_screen()
@@ -314,44 +394,48 @@ while True:
                     sound_sword.play()
                     print("attack")
                     pl.update_attack()
-                    for i in evil_sprites:
-                        if abs(i.rect.x - pl.rect.x) <= 60:
-                            i.hp -= 5
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_1:
-                        if inventory["fire_cristal"] != 0:
-                            inventory["fire_cristal"] -= 1
-                            enger_spire(
-                                pygame.image.load("datafiles/anim_fire.png"),
-                                3,
-                                1,
-                                pl.rect.x - 20,
-                                pl.rect.y - 10,
-                            )
-                            attack_cr = [True, 0]
-                            fire_son.play()
+                key = pygame.key.get_pressed()
 
-                    if event.key == pygame.K_e:
-                        if inventory["healme5"] > 0:
-                            pl.hp += 5
-                            inventory["healme5"] -= 1
-                    if event.key == pygame.K_a or event.key == pygame.K_d:
-                        sound_hod.play(-1)
+                if key[pygame.K_a] or key[pygame.K_d]:
+                    sound_hod.play(-1)
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_a or event.key == pygame.K_d:
                         sound_hod.stop()
             key = pygame.key.get_pressed()
+            for i in evil_sprites:
+                if abs(i.rect.x - pl.rect.x) <= 60:
+                    i.hp -= 5
+            if key[pygame.K_1]:
+                if inventory["fire_cristal"] != 0:
+                    inventory["fire_cristal"] -= 1
+                    enger_spire(
+                        pygame.image.load("datafiles/anim_fire.png"),
+                        3,
+                        1,
+                        pl.rect.x - 20,
+                        pl.rect.y - 10,
+                    )
+                    attack_cr = [True, 0]
+                    fire_son.play()
             if key[pygame.K_d]:
                 pl.update_hod("r")
                 otr = False
             if key[pygame.K_a]:
                 pl.update_hod("l")
                 otr = True
+            if key[pygame.K_SPACE] and flag_jumping:
+                pl.rect.y -= 70
+                flag_jumping = False
             if attack[0] and attack[1] <= 2:
                 pl.update_attack()
                 attack[1] += 1
             else:
                 attack = [False, 0]
+            if key[pygame.K_e]:
+                if inventory["healme5"] > 0:
+                    pl.hp += 5
+                    inventory["healme5"] -= 1
+
             screen.blit(pygame.image.load("datafiles/map1.png"), (0, 0))
             if attack_cr[0] and attack_cr[1] <= 10:
                 eff_sprites.update()
@@ -373,19 +457,21 @@ while True:
             evil_sprites.draw(screen)
             evil_sprites.update()
             gui.update()
+            pl.update()
             if torg_in_map:
                 torg.update()
             if fand_torg:
                 gui_t.update()
             player_sprites.draw(screen)
             if pl.rect.x > 1280:
-                if maps == "map0":
-                    maps = "map1"
-                else:
+                if maps == "map1":
                     maps = "map0"
+                else:
+                    maps = "map1"
                 break
             pygame.display.flip()
             clock.tick(10)
         except IndexError:
             pl.cur_frame = 0
             print("Ошибка анимации")
+write_res()
