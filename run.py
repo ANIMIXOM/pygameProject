@@ -391,7 +391,7 @@ while play:
                 ] = 1
                 x += 150
             lvls += 1
-            if lvls % 5 == 1:
+            if lvls % 5 == 0:
                 evils[
                     Evil(
                         player_sprites,
@@ -452,7 +452,7 @@ while play:
                 pl.update_hod("l")
                 otr = True
             if key[pygame.K_SPACE] and flag_jumping:
-                pl.rect.y -= 80
+                pl.rect.y -= 100
                 flag_jumping = False
             if attack[0] and attack[1] <= 2:
                 pl.update_attack()
