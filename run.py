@@ -278,7 +278,7 @@ class Player(pygame.sprite.Sprite):
 
 
 def start_or_over_screen():
-    global flag_is_dying
+    global flag_is_dying, inventory
     if flag_is_dying:
         screen.blit(
             scale(load("datafiles/game_over.png"), (1280, 720)),
@@ -292,7 +292,6 @@ def start_or_over_screen():
             "loot": 0,
             "rupis": 20,
         }
-
     else:
         screen.blit(scale((load("datafiles/start_game.png")), (1280, 720)), (0, 0))
     pl.rect.x = 10
